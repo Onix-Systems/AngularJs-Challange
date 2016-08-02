@@ -1,0 +1,13 @@
+{
+  "name": "angularjs_challenge",
+  "private": true,
+  "version": "0.0.0",
+  "description": "AngularJS Challenge",
+  "repository": "",
+  "license": "MIT",
+  "dependencies": {},
+  "devDependencies": {
+    "jasmine": "^2.4.1",
+    "karma": "^1.1.2"
+  }
+}
