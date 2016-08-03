@@ -19,6 +19,8 @@ module.exports = function(config) {
       'node_modules/angular-ui-router/release/angular-ui-router.js',
       'node_modules/ng-dialog/js/ngDialog.js',
       'node_modules/angular-mocks/angular-mocks.js',
+      'node_modules/lodash/lodash.min.js',
+      'node_modules/pluralize/pluralize.js',
       'public/app.js',
       'public/*.js',
       'spec/jsSpec/*.js'
