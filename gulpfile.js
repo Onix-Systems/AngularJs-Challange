@@ -26,5 +26,5 @@ gulp.task('coffeeTests:watch', function () {
     gulp.watch('./spec/*.coffee', ['coffeeTests']); 
 });
 gulp.task('default', function() {
-    
+    gulp.start("coffee", "coffeeTests");
 });
