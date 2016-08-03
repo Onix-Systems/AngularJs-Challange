@@ -16,33 +16,36 @@ describe 'AngularJS Challenge', ->
       httpMock = $httpBackend
       scope = $rootScope.$new()
       httpMock.when('GET', '/agent/listings/2/applications/').respond 200, foo: 'bar'
-
+      httpMock.when('POST', '/agent').respond 200, foo: 'bar'
       createController = ->
-        $controller 'ApplicationsController',
-          $scope: scope
-          $state: {params: {listingId: 2}}
-          $http: $http
-          ngDialog: ngDialog
-  
+      $controller 'ApplicationsController',
+        $scope: scope
+        $state: {params: {listingId: 2}}
+        $http: $http
+        ngDialog: ngDialog
       createAddUserController = ->
-        $controller 'AddUserController',
+        ctrl = $controller 'AddUserController',
           $scope: scope
-          $state: {}
+          $state: {go:(string) -> }
           $http: $http
           OfficesService: OfficesService
           UserFactory: UserFactory
-  
+        spyOn(ctrl.$state, 'go')
+        return ctrl
       return
     )
+  
   describe 'UserFactory', ->
     it 'save', -> 
       return
     return
-    
+
   describe 'AddUserController', ->
     it 'can save?', ->
       controller = createAddUserController()
-      expect(false).toBe(false);
+      controller.save();
+      httpMock.flush();
+      expect(controller.$state.go).toHaveBeenCalledWith('app.main.users.list');
       return
     return
     
