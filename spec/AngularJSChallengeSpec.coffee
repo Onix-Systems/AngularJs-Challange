@@ -12,23 +12,23 @@ describe 'AngularJS Challenge', ->
   createController = undefined
   createAddUserController = undefined
   factory = undefined
-  beforeEach inject(($rootScope, $httpBackend, $controller, ngDialog, UserFactory, OfficesService) ->
+  beforeEach inject(($rootScope, $httpBackend, $http, $controller, ngDialog, UserFactory, OfficesService) ->
       httpMock = $httpBackend
       scope = $rootScope.$new()
-      httpMock.when('GET', '/agent/listings/' + 2 + '/applications/').respond 200, foo: 'bar'
+      httpMock.when('GET', '/agent/listings/2/applications/').respond 200, foo: 'bar'
 
       createController = ->
         $controller 'ApplicationsController',
           $scope: scope
-          $state: {}
-          $http: $httpBackend
+          $state: {params: {listingId: 2}}
+          $http: $http
           ngDialog: ngDialog
   
       createAddUserController = ->
         $controller 'AddUserController',
           $scope: scope
           $state: {}
-          $http: $httpBackend
+          $http: $http
           OfficesService: OfficesService
           UserFactory: UserFactory
   
@@ -50,9 +50,9 @@ describe 'AngularJS Challenge', ->
 
     group = pets:'dog',
     applicants: [
-      'smoker'
-      'nonsmoking'
-      'healthy'
+      {'smoker': true}
+      {'nonsmoking': true}
+      {'healthy': true}
     ],
     expanded: true,
     rental_percent_of_income: 25
@@ -65,8 +65,8 @@ describe 'AngularJS Challenge', ->
     
     it 'has smokers?', ->
       controller = createController()
-#      expect(scope.hasSmokers group).toBe(true);
-      group.applicants.shift()
+      expect(scope.hasSmokers group).toBe(true);
+      group.applicants[0].smoker = false
       expect(scope.hasSmokers group).toBe(false);
       return
 
@@ -115,11 +115,9 @@ describe 'AngularJS Challenge', ->
 
     it 'fetchData', ->
       controller = createController()
-      httpMock.expectGET('GET', '/agent/listings/' + 2 + '/applications/')
-#      httpMock.flush();
-      
-#      test = scope.fetchData()
-#      console.log(test)
+      scope.fetchData()
+      httpMock.flush();
+      expect(scope.groups).toEqual(foo: 'bar')
       return
     return  
   return
