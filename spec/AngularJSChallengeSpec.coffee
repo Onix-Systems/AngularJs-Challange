@@ -16,7 +16,7 @@ describe 'AngularJS Challenge', ->
       httpMock = $httpBackend
       scope = $rootScope.$new()
       httpMock.when('GET', '/agent/listings/2/applications/').respond 200, foo: 'bar'
-      httpMock.when('POST', '/agent').respond 200, foo: 'bar'
+      httpMock.when('POST', '/agent').respond 200, {data: {name: 'Jon Doe'}}
       createController = ->
       $controller 'ApplicationsController',
         $scope: scope
@@ -34,9 +34,28 @@ describe 'AngularJS Challenge', ->
         return ctrl
       return
     )
-  
+
   describe 'UserFactory', ->
-    it 'save', -> 
+    beforeEach inject(($httpBackend, UserFactory) ->
+      httpMock.whenRoute('PUT','/agent/:id').respond (method, url, data, headers, params) ->
+        return [200, {data: {name: 'Jon Doe', id: Number(params.id)}}]
+      factory = UserFactory
+      return
+    )
+    it 'save and update', ->
+      userFactory = new factory(id: 5);
+      userFactory.save();
+      httpMock.flush();
+      expect(userFactory.name).toBe('Jon Doe');
+      expect(userFactory.id).toBe(5);
+      return
+      
+    it 'save and create', ->
+      userFactory = new factory();
+      userFactory.save();
+      httpMock.flush();
+      expect(userFactory.name).toBe('Jon Doe');
+      expect(userFactory.id).toBe(undefined);
       return
     return
 
